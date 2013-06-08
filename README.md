@@ -1,5 +1,7 @@
 # Markedly
 
+[![Build Status](https://travis-ci.org/hara/markedly.png)](https://travis-ci.org/hara/markedly)
+
 Markedly is live-reloadable markdown previewer.
 
 Markedly converts markdown document and opens it with default browser.
