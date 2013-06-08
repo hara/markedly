@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      var ws = new WebSocket('ws://localhost:8080');
+
+      ws.onmessage = function(event) {
+        if (event.data == 'updated') {
+          window.location.reload();
+        }
+      };
+
+      window.onunload = function() {
+        ws.close();
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Markedly</h1>
+
+  </body>
+</html>

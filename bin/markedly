@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require 'markedly'
+require 'optparse'
+
+options = {}
+default_options = {
+  css: 'github',
+  debug: false,
+  interval: 5,
+  port: Markedly::Document::DEFAULT_PORT,
+  parse: Markedly::Markdown::DEFAULT_EXTENSIONS,
+  render: Markedly::Markdown::DEFAULT_RENDERER_OPTIONS,
+}
+
+ARGV.options do |parser|
+  Version = Markedly::VERSION
+
+  parser.banner = 'Usage: markedly [redcarpet options] [markedly options] document.md'
+
+  parser.separator ''
+  parser.separator 'Redcarpet Options:'
+
+  Markedly::Markdown::AVAILABLE_EXTENSIONS.each do |ext|
+    parser.on('--parse-' + ext.to_s.gsub('_', '-')) { (options[:parse] ||= {})[ext] = true }
+  end
+  Markedly::Markdown::RENDERER_OPTIONS.each do |render|
+    parser.on('--render-' + render.to_s.gsub('_', '-')) { (options[:render] ||= {})[render] = true }
+  end
+
+  parser.separator ''
+  parser.separator 'Markedly Options:'
+
+  parser.on('-c', '--css CSS',
+            "use predefined or custom CSS (default: %s)" % default_options[:css]) do |css|
+    options[:css] = css
+  end
+
+  parser.on('-d','--debug','output debug message') { options[:debug] = true }
+
+  parser.on('-i', '--interval INTERVAL', Integer,
+            "watch every INTERVAL seconds (default: %d)" % default_options[:interval]) do |interval|
+    options[:interval] = interval
+  end
+
+  parser.on('-p', '--port PORT', "use PORT (default: %d)" % default_options[:port]) do |port|
+    options[:port] = port
+  end
+
+  parser.on('-h','--help','show this message') { puts parser.to_s; exit }
+  parser.on('-v','--version','show version') { puts parser.ver; exit }
+end
+
+begin
+  ARGV.permute!
+rescue OptionParser::InvalidOption => e
+  warn e.message
+  abort ARGV.options.to_s
+end
+
+abort ARGV.options.to_s if ARGV.empty?
+
+source = ARGV.first
+options = default_options.merge(options)
+
+abort "%s not found" % source unless File.file?(source)
+
+Markedly::App.run!(source, options)

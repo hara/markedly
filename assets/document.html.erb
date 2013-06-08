@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- unless css.nil? -%>
+    <link rel="stylesheet" href="<%= css.href %>">
+    <%- end -%>
+    <script>
+      var ws = new WebSocket('ws://localhost:<%= port %>');
+
+      ws.onmessage = function(event) {
+        if (event.data == 'updated') {
+          window.location.reload();
+        }
+      };
+
+      window.onunload = function() {
+        ws.close();
+      };
+    </script>
+  </head>
+  <body>
+    <%= body %>
+  </body>
+</html>
