@@ -34,6 +34,9 @@ Show options:
 $ markedly -h
 ```
 
+## Special Thanks
+
+* [Github Markdown CSS](https://gist.github.com/andyferra/2554919)
 
 ## Contributing
 
