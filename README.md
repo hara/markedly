@@ -36,7 +36,10 @@ $ markedly -h
 
 ## Special Thanks
 
-* [Github Markdown CSS](https://gist.github.com/andyferra/2554919)
+Github style css is originally from:
+
+* [Github Markdown CSS](https://gist.github.com/andyferra/2554919) of Andy Ferra
+* [pytgments-style-github](https://pypi.python.org/pypi/pygments-style-github) of Hugo Maia Vieira
 
 ## Contributing
 
