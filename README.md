@@ -1,7 +1,9 @@
 # Markedly
 
 [![Build Status](https://travis-ci.org/hara/markedly.png)](https://travis-ci.org/hara/markedly)
+[![Coverage Status](https://coveralls.io/repos/hara/markedly/badge.png)](https://coveralls.io/repos/hara/markedly)
 [![Code Climate](https://codeclimate.com/github/hara/markedly.png)](https://codeclimate.com/github/hara/markedly)
+
 
 Markedly is live-reloadable markdown previewer.
 

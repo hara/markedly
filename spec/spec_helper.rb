@@ -1,3 +1,13 @@
+require 'coveralls'
+Coveralls.wear!
+
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/assets/"
+  add_filter "/spec/doc/"
+  add_filter "/vendor/"
+end
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'markedly'
 
