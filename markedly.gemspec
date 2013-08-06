@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "markedly"
   spec.version       = Markedly::VERSION
   spec.authors       = ["Yoshihiro Hara"]
-  spec.description   = %q{Markedly previews a markdown document and reloads automatically using WebSocket.}
+  spec.description   = %q{Markedly offers live preview feature to your favorite browser.}
   spec.summary       = %q{A live-reloadable markdown previewer}
   spec.homepage      = "https://github.com/hara/markedly"
   spec.license       = "MIT"
