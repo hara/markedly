@@ -5,6 +5,10 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'English'
 require 'markedly/version'
 
+def windows?
+  !!RUBY_PLATFORM.match(/mswin|mingw|cygwin/)
+end
+
 Gem::Specification.new do |spec|
   spec.name          = 'markedly'
   spec.version       = Markedly::VERSION
@@ -19,13 +23,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'addressable'
-  spec.add_dependency 'em-websocket'
-  spec.add_dependency 'launchy'
-  spec.add_dependency 'redcarpet'
-  spec.add_dependency 'pygments.rb'
+  spec.add_runtime_dependency 'addressable', '~> 2.3.5'
+  spec.add_runtime_dependency 'em-websocket', '~> 0.5.0'
+  spec.add_runtime_dependency 'launchy', '~> 2.3.0'
+  spec.add_runtime_dependency 'redcarpet', '~> 3.0.0'
+  spec.add_runtime_dependency 'pygments.rb', windows? ? '= 0.5.0' : '~> 0.5.4'
   spec.add_development_dependency 'bundler', '~> 1.3'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'rake', '~> 10.1.0'
+  spec.add_development_dependency 'rspec', '~> 2.14.1'
+  spec.add_development_dependency 'coveralls', '~> 0.7.0'
 end
