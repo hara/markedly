@@ -12,6 +12,31 @@ body > *:first-child {
 body > *:last-child {
   margin-bottom: 0 !important; }
 
+.container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
 a {
   color: #4183C4; }
 a.absent {
