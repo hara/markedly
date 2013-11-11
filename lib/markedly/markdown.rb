@@ -52,7 +52,7 @@ module Markedly
       extensions ||= DEFAULT_EXTENSIONS
       renderer_options ||= DEFAULT_RENDERER_OPTIONS
       renderer_class = Class.new(Redcarpet::Render::HTML) do
-        include WithPygments if Markdown.python_available?
+        include WithPygments if Markdown.pygments_available?
       end
       renderer = renderer_class.new(renderer_options)
       @markdown = Redcarpet::Markdown.new(renderer, extensions)
@@ -64,8 +64,8 @@ module Markedly
 
     private
 
-    def self.python_available?
-      executable?('python2') || executable?('python')
+    def self.pygments_available?
+      executable?('pygmentize')
     end
 
     def self.executable?(command)
