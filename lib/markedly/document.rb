@@ -1,10 +1,11 @@
 # coding: utf-8
 require 'erb'
 require 'tempfile'
+require 'uri'
 require 'addressable/uri'
 
 module Markedly
-
+  # Represents a markdown document.
   class Document
     DEFAULT_PORT = 8080
 
@@ -15,6 +16,9 @@ module Markedly
     attr_reader :css
     attr_reader :port
 
+    # Initializes with source file.
+    #
+    # source - The String filename of the markdown document.
     def initialize(source, options = {})
       @source = File.expand_path(source)
       @path = File.basename(source)
@@ -25,6 +29,9 @@ module Markedly
       initialize_destination
     end
 
+    # Converts the markdown for preview.
+    #
+    # Returns nothing.
     def convert
       @dest_file.rewind
       @dest_file.write render(body_html, @css, @port)
@@ -40,7 +47,7 @@ module Markedly
         @css = nil
       elsif File.file?(css)
         @css = CssAsset.new(File.expand_path(css))
-      elsif css =~ /^https?:\/\//
+      elsif css =~ URI.regexp(%w(http https))
         @css = CssAsset.new(css)
       else
         @css = CssAsset.asset(css)
@@ -53,7 +60,7 @@ module Markedly
     end
 
     def initialize_destination
-      basename = [ File.basename(self.source), '.html' ]
+      basename = [File.basename(source), '.html']
       @dest_file = Tempfile.open(basename)
       @destination = @dest_file.path
       @uri = Addressable::URI.convert_path(@destination).to_s
@@ -68,8 +75,5 @@ module Markedly
       erb = ERB.new(File.read(@template), nil, '-')
       erb.result(binding)
     end
-
   end
-
 end
-
