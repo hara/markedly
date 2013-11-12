@@ -38,6 +38,8 @@ ARGV.options do |parser|
 
   parser.on('-d','--debug','output debug message') { options[:debug] = true }
 
+  parser.on('-e','--export','export to file') { options[:export] = true }
+
   parser.on('-i', '--interval INTERVAL', Integer,
             "watch every INTERVAL seconds (default: %d)" % default_options[:interval]) do |interval|
     options[:interval] = interval

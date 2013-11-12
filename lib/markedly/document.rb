@@ -2,6 +2,7 @@
 require 'erb'
 require 'tempfile'
 require 'uri'
+require 'open-uri'
 require 'addressable/uri'
 
 module Markedly
@@ -34,9 +35,16 @@ module Markedly
     # Returns nothing.
     def convert
       @dest_file.rewind
-      @dest_file.write render(body_html, @css, @port)
+      @dest_file.write render(body_html, css: @css, preview: true, port: @port)
       @dest_file.truncate(@dest_file.pos)
       @dest_file.flush
+    end
+
+    # Exports to HTML with styles.
+    def export
+      dest = File.join(File.dirname(@source),
+                       File.basename(@source, File.extname(source)) + '.html')
+      File.write dest, render(body_html, style: style, preview: false)
     end
 
     private
@@ -71,9 +79,16 @@ module Markedly
       @markdown.render(content)
     end
 
-    def render(body, css, port)
+    def render(body, css: nil, style: nil, preview: true, port: DEFAULT_PORT)
       erb = ERB.new(File.read(@template), nil, '-')
       erb.result(binding)
+    end
+
+    def style
+      return '' if @css.nil?
+      open(@css.path) do |f|
+        return f.read
+      end
     end
   end
 end

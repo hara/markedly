@@ -15,6 +15,13 @@ module Markedly
     end
 
     def run!
+      return @document.export if @options[:export]
+      preview
+    end
+
+    private
+
+    def preview
       @document.convert
       puts "Open '%s'" % @document.uri
       Launchy.open(@document.uri)
@@ -54,8 +61,6 @@ module Markedly
         end
       end
     end
-
-    private
 
     def debug(message)
       puts message if @options[:debug]
