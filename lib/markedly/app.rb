@@ -4,16 +4,26 @@ require 'em-websocket'
 require 'launchy'
 
 module Markedly
+  # Entry point of the application.
   class App
+    # Runs the application.
+    #
+    # source - The String filename of the markdown source.
+    # options - The Hash options:
     def self.run!(source, options = {})
       App.new(source, options).run!
     end
 
+    # Initializes application.
+    #
+    # source - The String filename of the markdown source.
+    # options - The Hash options:
     def initialize(source, options = {})
       @document = Document.new(source, options)
       @options = options
     end
 
+    # Runs the application.
     def run!
       return @document.export if @options[:export]
       preview
@@ -23,7 +33,7 @@ module Markedly
 
     def preview
       @document.convert
-      puts "Open '%s'" % @document.uri
+      puts "Open '#{@document.uri}'"
       Launchy.open(@document.uri)
 
       EM.run do
@@ -51,7 +61,7 @@ module Markedly
           loop do
             mtime = File.mtime(@document.source)
             if mtime > last_mtime
-              puts "file modified"
+              puts 'file modified'
               @document.convert
               @channel.push 'updated'
             end

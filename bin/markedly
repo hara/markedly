@@ -4,7 +4,7 @@ require 'markedly'
 require 'optparse'
 
 options = {}
-default_options = {
+default = {
   css: 'github',
   debug: false,
   interval: 5,
@@ -14,43 +14,58 @@ default_options = {
 }
 
 ARGV.options do |parser|
-  Version = Markedly::VERSION
+  parser.version = Markedly::VERSION
 
-  parser.banner = 'Usage: markedly [redcarpet options] [markedly options] document.md'
+  parser.banner =
+    'Usage: markedly [redcarpet options] [markedly options] document.md'
 
   parser.separator ''
   parser.separator 'Redcarpet Options:'
 
   Markedly::Markdown::AVAILABLE_EXTENSIONS.each do |ext|
-    parser.on('--parse-' + ext.to_s.gsub('_', '-')) { (options[:parse] ||= {})[ext] = true }
+    parser.on('--parse-' + ext.to_s.gsub('_', '-')) do
+      (options[:parse] ||= {})[ext] = true
+    end
   end
+
   Markedly::Markdown::RENDERER_OPTIONS.each do |render|
-    parser.on('--render-' + render.to_s.gsub('_', '-')) { (options[:render] ||= {})[render] = true }
+    parser.on('--render-' + render.to_s.gsub('_', '-')) do
+      (options[:render] ||= {})[render] = true
+    end
   end
 
   parser.separator ''
   parser.separator 'Markedly Options:'
 
-  parser.on('-c', '--css CSS',
-            "use predefined or custom CSS (default: %s)" % default_options[:css]) do |css|
+  css_message = "use predefined or custom CSS (default: #{default[:css]})"
+  parser.on('-c', '--css CSS', css_message) do |css|
     options[:css] = css
   end
 
-  parser.on('-d','--debug','output debug message') { options[:debug] = true }
+  parser.on('-d', '--debug', 'output debug message') { options[:debug] = true }
 
-  parser.on('-e','--export','export to file') { options[:export] = true }
+  parser.on('-e', '--export', 'export to file') { options[:export] = true }
 
-  parser.on('-i', '--interval INTERVAL', Integer,
-            "watch every INTERVAL seconds (default: %d)" % default_options[:interval]) do |interval|
-    options[:interval] = interval
+  interval_message =
+    "watch every INTERVAL seconds (default: #{default[:interval]})"
+  parser.on('-i', '--interval INTERVAL', Integer, interval_message) do |i|
+    options[:interval] = i
   end
 
-  parser.on('-p', '--port PORT', "use PORT (default: %d)" % default_options[:port]) do |port|
+  port_message = "use PORT (default: #{default[:port]})"
+  parser.on('-p', '--port PORT', port_message) do |port|
     options[:port] = port
   end
 
-  parser.on('-h','--help','show this message') { puts parser.to_s; exit }
-  parser.on('-v','--version','show version') { puts parser.ver; exit }
+  parser.on('-h', '--help', 'show this message') do
+    puts parser.to_s
+    exit
+  end
+
+  parser.on('-v', '--version', 'show version') do
+    puts parser.ver
+    exit
+  end
 end
 
 begin
@@ -63,8 +78,8 @@ end
 abort ARGV.options.to_s if ARGV.empty?
 
 source = ARGV.first
-options = default_options.merge(options)
+options = default.merge(options)
 
-abort "%s not found" % source unless File.file?(source)
+abort "#{source} not found" unless File.file?(source)
 
 Markedly::App.run!(source, options)
